@@ -34,7 +34,7 @@ private:
 	void SeparateFilePath(const std::wstring& filePath);
 
 	/// <summary>
-	/// DDSテクスチとしてファイル書き出し
+	/// DDSテクスチャとしてファイル書き出し
 	/// </summary>
 	void SaveDDSTextureToFile();
 

@@ -43,7 +43,7 @@ void TextureConverter::SeparateFilePath(const std::wstring& filePath) {
 	size_t pos1;
 	std::wstring exceptExt;
 
-	//区切り文字','が出てくる一番最後の部分を検索
+	//区切り文字'.'が出てくる一番最後の部分を検索
 	pos1 = filePath.rfind('.');
 	//検索がヒットしたら
 	if (pos1 != std::wstring::npos) {
@@ -67,7 +67,7 @@ void TextureConverter::SeparateFilePath(const std::wstring& filePath) {
 		return;
 	}
 
-	//区切り文字'/'ふぁ出てくる一番最後の部分を検索
+	//区切り文字'/'が出てくる一番最後の部分を検索
 	pos1 = exceptExt.rfind('/');
 	if (pos1 != std::wstring::npos) {
 		//区切り文字の前までディレクトリパスとして保存
