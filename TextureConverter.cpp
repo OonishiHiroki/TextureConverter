@@ -1,6 +1,8 @@
 #include "TextureConverter.h"
 using namespace DirectX;
 
+HRESULT result;
+
 void TextureConverter::ConvertTextureWICToDDS(const std::string& filePath) {
 	//テクスチャファイルを読み込む
 	LoadWICTextureFromFile(filePath);
@@ -11,7 +13,6 @@ void TextureConverter::ConvertTextureWICToDDS(const std::string& filePath) {
 
 void TextureConverter::LoadWICTextureFromFile(const std::string& filePath) {
 
-	HRESULT result;
 	//ファイルパスをワイド文字列に変換する
 	std::wstring wfilePath = ConvertMultiByteStringToWideString(filePath);
 
@@ -22,6 +23,20 @@ void TextureConverter::LoadWICTextureFromFile(const std::string& filePath) {
 
 	//フォルダパスとファイル名を分離する
 	SeparateFilePath(wfilePath);
+}
+
+void TextureConverter::SaveDDSTextureToFile() {
+	//読み込んだテクスチャをSRGBとして扱う
+	metadata_.format = MakeSRGB(metadata_.format);
+
+	HRESULT result;
+
+	//出力ファイル名を設定する
+	std::wstring filePath = directoryPath_ + fileName_ + L".dds";
+
+	//DDSファイル書き出し
+	result = SaveToDDSFile(scratchImage_.GetImages(), scratchImage_.GetImageCount(), metadata_, DDS_FLAGS_NONE, filePath.c_str());
+	assert(SUCCEEDED(result));
 }
 
 std::wstring TextureConverter::ConvertMultiByteStringToWideString(const std::string& mString) {
@@ -80,18 +95,4 @@ void TextureConverter::SeparateFilePath(const std::wstring& filePath) {
 	//区切り文字がないのでファイル名のみとして扱う
 	directoryPath_ = L"";
 	fileName_ = exceptExt;
-}
-
-void TextureConverter::SaveDDSTextureToFile() {
-	//読み込んだテクスチャをSRGBとして扱う
-	metadata_.format = MakeSRGB(metadata_.format);
-
-	HRESULT result;
-
-	//出力ファイル名を設定する
-	std::wstring filePath = directoryPath_ + fileName_ + L".dds";
-
-	//DDSファイル書き出し
-	result = SaveToDDSFile(scratchImage_.GetImages(), scratchImage_.GetImageCount(), metadata_, DDS_FLAGS_NONE, filePath.c_str());
-	assert(SUCCEEDED(result));
 }
